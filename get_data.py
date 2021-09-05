@@ -1,6 +1,8 @@
 import pandas as pd
+import argparse
 
-def get_breaches():
+
+def get_breaches(output_file, django_model=None):
     url = 'https://en.wikipedia.org/wiki/List_of_data_breaches'
     df = pd.read_html(url, header=0)
     data = df[0]
@@ -26,7 +28,13 @@ def get_breaches():
         'Method' : 'methods',
         'Sources' : 'sources'
     })
-    data.to_json('data.json', orient='records')
+    data.to_json(output_file, orient='records')
 
 if __name__ == '__main__':
-    get_breaches()
+    parser = argparse.ArgumentParser(
+                prog='Scraping Data Breaches from Wikipidia' 
+            )
+    parser.add_argument('--output', '-o', type=str, default='data.json', help='Output file of Data Breaches json data')
+    parser.add_argument('--django-model-name', '-d', type=str, action='store', help='Export data as Django fixture informing the Model name')
+    args = parser.parse_args()
+    get_breaches(args.output, args.django_model_name)
