@@ -1,5 +1,5 @@
 # Data breaches scraper
-This scraper gets data from [Wikipidia's List of Data Breaches](https://en.wikipedia.org/wiki/List_of_data_breaches) and returns a json list containing the data of all databreaches. Built using Python and pandas.
+This scraper gets data from [Wikipidia's List of Data Breaches](https://en.wikipedia.org/wiki/List_of_data_breaches) and returns a json list containing the data of all databreaches. Built using Python, pandas and [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#).
 
 Each data breach contains:
 
@@ -15,6 +15,8 @@ Each data breach contains:
 Required python packages:
 * pandas
 * lxml 
+* beautifulsoup4
+* requests
 
 ## Installation and use
 Install the requirements with `pip`:
