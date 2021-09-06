@@ -1,9 +1,38 @@
 import pandas as pd
 import argparse
+from bs4 import BeautifulSoup
+import requests
+import json
 
+url = 'https://en.wikipedia.org/wiki/List_of_data_breaches'
+
+def get_references():
+    """Getting links from the 'Reference section'. BeautifulSoup is used to scrape data
+    using the html tags.
+        
+        Return:
+            references (dict) : dictionary with references in the same order found on
+        the References section. First reference will have key 1, second will have key 2, etc...
+    """
+    references = {}
+    page = requests.get(url)
+
+    soup = BeautifulSoup(page.content, "html.parser")
+    ol_references = soup.find('ol', class_='references')
+    links = ol_references.find_all('a', class_='external text')
+
+    i = 1
+    for link in links:
+        references[i] = link.get('href')
+        i+=1
+
+    return references
 
 def get_breaches(output_file, django_model=None):
-    url = 'https://en.wikipedia.org/wiki/List_of_data_breaches'
+    """Getting data breaches data using pandas. Pandas allows easier manipulation
+    of columns and data rows.
+        Data is dumped on file named after output_file parameter.
+    """
     df = pd.read_html(url, header=0)
     data = df[0]
 
@@ -24,13 +53,33 @@ def get_breaches(output_file, django_model=None):
         'Entity' : 'entity',
         'Year' : 'year',
         'Records' : 'records',
-        'Organization Type' : 'organization_type',
+        'Organization type' : 'organization_type',
         'Method' : 'methods',
         'Sources' : 'sources'
     })
+
+    # replace references strings with urls
+    references = get_references()
+
+    refs_data = []
+
+    for index, row in data.iterrows(): 
+        content = str(row['sources']).replace('[', ' ').replace(']', ' ').split(' ')
+        content = [int(c) for c in content if c != '']
+        refs = []
+        for c in content:
+            refs.append(references[c])
+        refs_data.append(refs)
+        # print(refs_data)
+    
+    data['sources'] = refs_data
+
     data.to_json(output_file, orient='records')
 
 if __name__ == '__main__':
+    """Main function. Sets program parameters and call scraper function.
+    """
+
     parser = argparse.ArgumentParser(
                 prog='Scraping Data Breaches from Wikipidia' 
             )
