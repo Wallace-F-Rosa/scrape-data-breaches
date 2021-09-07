@@ -82,32 +82,16 @@ def get_breaches(output_file, django_model=None):
     
     data['sources'] = refs_data
 
-    output_json = json.loads(data.to_json(orient='records'))
-
-    # if user specified django model name, make json as django fixture
-    if django_model != None:
-        i = 1
-        output_fixture = []
-        for obj in output_json:
-            output_fixture.append({
-                'model' : django_model,
-                'pk' : i,
-                'fields' : obj
-            })
-            i+=1
-        output_json = output_fixture
-
-    with open(output_file, 'w+', encoding='utf-8') as outf:
-        json.dump(output_json, outf, indent=4)
+    data.to_json(output_file, orient='records')
 
 if __name__ == '__main__':
     """Main function. Sets program parameters and call scraper function.
     """
 
     parser = argparse.ArgumentParser(
-            prog='Scraping Data Breaches from Wikipidia' 
+                prog='Scraping Data Breaches from Wikipidia' 
             )
-    parser.add_argument('--output', '-o', type=str, default='data.json', help='Output file of Data Breaches json data.')
-    parser.add_argument('--django-model-name', '-d', type=str, default=None, help='Export data as Django fixture informing the Model name.')
+    parser.add_argument('--output', '-o', type=str, default='data.json', help='Output file of Data Breaches json data')
+    parser.add_argument('--django-model-name', '-d', type=str, action='store', help='Export data as Django fixture informing the Model name')
     args = parser.parse_args()
     get_breaches(args.output, args.django_model_name)
