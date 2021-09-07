@@ -92,6 +92,5 @@ if __name__ == '__main__':
                 prog='Scraping Data Breaches from Wikipidia' 
             )
     parser.add_argument('--output', '-o', type=str, default='data.json', help='Output file of Data Breaches json data')
-    parser.add_argument('--django-model-name', '-d', type=str, action='store', help='Export data as Django fixture informing the Model name')
     args = parser.parse_args()
     get_breaches(args.output, args.django_model_name)
