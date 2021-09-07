@@ -58,6 +58,14 @@ def get_breaches(output_file, django_model=None):
         'Sources' : 'sources'
     })
 
+    # treat case of organization with more then one type (e.g. 'financial, credit reporting')
+    org_type_data = []
+    for index, row in data.iterrows():
+        content = str(row['organization_type']).split(', ')
+        org_type_data.append(content)
+
+    data['organization_type'] = org_type_data
+
     # replace references strings with urls
     references = get_references()
 
