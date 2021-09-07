@@ -32,12 +32,10 @@ The data will be in the `data.json` file.
 Program options available : 
 
 ```
-usage: Scraping Data Breaches from Wikipidia [-h] [--output OUTPUT] [--django-model-name DJANGO_MODEL_NAME]
+usage: Scraping Data Breaches from Wikipidia [-h] [--output OUTPUT]
 
 optional arguments:
   -h, --help            show this help message and exit
   --output OUTPUT, -o OUTPUT
                         Output file of Data Breaches json data.
-  --django-model-name DJANGO_MODEL_NAME, -d DJANGO_MODEL_NAME
-                        Export data as Django fixture informing the Model name.
 ```
