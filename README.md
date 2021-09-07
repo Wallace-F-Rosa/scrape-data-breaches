@@ -5,9 +5,8 @@ Each data breach contains:
 
 | field | description |
 | ----- | ----------- |
-| entity | A string with the name of the entity that suffered the breach. |
+| entity | object containing name of the organization and organization_type(sphere of activity) |
 | year | Integer representing wich year the breach occurred. |
-| organization_type | String representing the entity's sphere of activity. |
 | method | string containing the method used in the breaching process. |
 | sources | List of strings containing the urls of midia sources covering the data breach. |
 
