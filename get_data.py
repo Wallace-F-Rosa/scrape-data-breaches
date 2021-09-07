@@ -66,6 +66,19 @@ def get_breaches(output_file, django_model=None):
 
     data['organization_type'] = org_type_data
 
+    # make entity an object with name and organization_type
+    orgs_data = []
+    for index, row in data.iterrows():
+        entity_data = {
+                'name' : row['entity'],
+                'organization_type' : row['organization_type']
+            }
+        orgs_data.append(entity_data)
+
+    data['entity'] = orgs_data
+
+    data = data.drop(columns=['organization_type'])
+
     # replace references strings with urls
     references = get_references()
 
@@ -82,7 +95,11 @@ def get_breaches(output_file, django_model=None):
     
     data['sources'] = refs_data
 
-    data.to_json(output_file, orient='records')
+    output_json = json.loads(data.to_json(orient='records'))
+
+    with open(output_file, 'w+', encoding='utf-8') as outf:
+        json.dump(output_json, outf, ensure_ascii=False, indent=4)
+
 
 if __name__ == '__main__':
     """Main function. Sets program parameters and call scraper function.
@@ -93,4 +110,4 @@ if __name__ == '__main__':
             )
     parser.add_argument('--output', '-o', type=str, default='data.json', help='Output file of Data Breaches json data')
     args = parser.parse_args()
-    get_breaches(args.output, args.django_model_name)
+    get_breaches(args.output)
