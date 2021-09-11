@@ -54,7 +54,7 @@ def get_breaches(output_file, django_model=None):
         'Year' : 'year',
         'Records' : 'records',
         'Organization type' : 'organization_type',
-        'Method' : 'methods',
+        'Method' : 'method',
         'Sources' : 'sources'
     })
 
